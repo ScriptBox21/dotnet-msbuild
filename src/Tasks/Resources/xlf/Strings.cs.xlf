@@ -1331,6 +1331,11 @@
         <target state="translated">Byla nalezena instalace sady Microsoft Windows SDK v umístění {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="GetReferenceAssemblyPaths.OutOfDateSDK">
+        <source>MSB3971: The reference assemblies for "{0}" were not found. You might be using an older .NET SDK to target .NET 5.0 or higher. Update Visual Studio and/or your .NET SDK.</source>
+        <target state="translated">MSB3971: Referenční sestavení pro {0} se nenašla. Je možné, že používáte starší sadu .NET SDK, se kterou cílíte na .NET 5.0 nebo novější. Aktualizujte Visual Studio nebo sadu .NET SDK.</target>
+        <note>{StrBegin="MSB3971: "}</note>
+      </trans-unit>
       <trans-unit id="MakeDir.Comment">
         <source>Creating directory "{0}".</source>
         <target state="translated">Probíhá vytváření adresáře {0}.</target>
@@ -1827,8 +1832,10 @@
         <note>{StrBegin="MSB3276: "}</note>
       </trans-unit>
       <trans-unit id="ResolveAssemblyReference.FoundConflicts">
-        <source>MSB3277: Found conflicts between different versions of "{0}" that could not be resolved.  These reference conflicts are listed in the build log when log verbosity is set to detailed.</source>
-        <target state="translated">MSB3277: Byly zjištěny konflikty mezi různými verzemi sestavení {0}. Tyto problémy nebylo možné vyřešit. Tyto konflikty odkazů jsou uvedeny v protokolu sestavení, jestliže je protokolování nastaveno jako podrobné.</target>
+        <source>MSB3277: Found conflicts between different versions of "{0}" that could not be resolved.
+{1}</source>
+        <target state="translated">MSB3277: Našly se konflikty mezi různými verzemi {0}, které se nepovedlo přeložit.
+{1}</target>
         <note>{StrBegin="MSB3277: "}</note>
       </trans-unit>
       <trans-unit id="ResolveAssemblyReference.LogAttributeFormat">
@@ -2473,6 +2480,11 @@
         <target state="translated">Rozzipování ze souboru {0} do souboru {1} neproběhlo, protože parametr {2} byl v projektu nastaven na hodnotu {3} a velikosti souborů a časová razítka se shodují.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Unzip.DidNotUnzipBecauseOfFilter">
+        <source>Did not unzip file "{0}" because it didn't match the include filter or because it matched the exclude filter.</source>
+        <target state="new">Did not unzip file "{0}" because it didn't match the include filter or because it matched the exclude filter.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Unzip.ErrorCouldNotCreateDestinationDirectory">
         <source>MSB3931: Failed to unzip to directory "{0}" because it could not be created.  {1}</source>
         <target state="translated">MSB3931: Rozzipování do adresáře {0} se nepodařilo, protože ho nebylo možné vytvořit. {1}</target>
@@ -2502,6 +2514,16 @@
         <source>MSB3932: Failed to unzip file "{0}" because the file does not exist or is inaccessible.</source>
         <target state="translated">MSB3932: Soubor {0} se nepodařilo rozzipovat, protože neexistuje nebo není přístupný.</target>
         <note>{StrBegin="MSB3932: "}</note>
+      </trans-unit>
+      <trans-unit id="Unzip.ErrorParsingPatternInvalidPath">
+        <source>MSB3937: Failed to parse pattern "{0}" because it contains an invalid path character.</source>
+        <target state="new">MSB3937: Failed to parse pattern "{0}" because it contains an invalid path character.</target>
+        <note>{StrBegin="MSB3937: "}</note>
+      </trans-unit>
+      <trans-unit id="Unzip.ErrorParsingPatternPropertyReferences">
+        <source>MSB3938: Failed to parse pattern "{0}" because it contains a property reference which isn't supported.</source>
+        <target state="new">MSB3938: Failed to parse pattern "{0}" because it contains a property reference which isn't supported.</target>
+        <note>{StrBegin="MSB3938: "}</note>
       </trans-unit>
       <trans-unit id="Unzip.FileComment">
         <source>Unzipping file "{0}" to "{1}".</source>

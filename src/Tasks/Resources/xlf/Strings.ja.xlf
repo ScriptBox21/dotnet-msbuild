@@ -1331,6 +1331,11 @@
         <target state="translated">Microsoft Windows SDK が "{0}" にインストールされていました。</target>
         <note />
       </trans-unit>
+      <trans-unit id="GetReferenceAssemblyPaths.OutOfDateSDK">
+        <source>MSB3971: The reference assemblies for "{0}" were not found. You might be using an older .NET SDK to target .NET 5.0 or higher. Update Visual Studio and/or your .NET SDK.</source>
+        <target state="translated">MSB3971: "{0}" の参照アセンブリが見つかりませんでした。.Net 5.0 以上をターゲットにするために、古い .NET SDK を使用している可能性があります。Visual Studio と .NET SDK のいずれかまたはその両方を更新してください。</target>
+        <note>{StrBegin="MSB3971: "}</note>
+      </trans-unit>
       <trans-unit id="MakeDir.Comment">
         <source>Creating directory "{0}".</source>
         <target state="translated">ディレクトリ "{0}" を作成しています。</target>
@@ -1827,8 +1832,10 @@
         <note>{StrBegin="MSB3276: "}</note>
       </trans-unit>
       <trans-unit id="ResolveAssemblyReference.FoundConflicts">
-        <source>MSB3277: Found conflicts between different versions of "{0}" that could not be resolved.  These reference conflicts are listed in the build log when log verbosity is set to detailed.</source>
-        <target state="translated">MSB3277: "{0}" の異なるバージョン間で、解決できない競合が見つかりました。これらの参照上の競合は、ログの詳細度が詳細に設定されている場合にビルド ログにリストされます。</target>
+        <source>MSB3277: Found conflicts between different versions of "{0}" that could not be resolved.
+{1}</source>
+        <target state="translated">MSB3277: "{0}" の異なるバージョン間で、解決できない競合が見つかりました。
+{1}</target>
         <note>{StrBegin="MSB3277: "}</note>
       </trans-unit>
       <trans-unit id="ResolveAssemblyReference.LogAttributeFormat">
@@ -2473,6 +2480,11 @@
         <target state="translated">"{2}" パラメーターがプロジェクトで "{3}" に設定されているため、またファイルのサイズとタイムスタンプが一致するため、ファイル "{0}" からファイル "{1}" に解凍しませんでした。</target>
         <note />
       </trans-unit>
+      <trans-unit id="Unzip.DidNotUnzipBecauseOfFilter">
+        <source>Did not unzip file "{0}" because it didn't match the include filter or because it matched the exclude filter.</source>
+        <target state="new">Did not unzip file "{0}" because it didn't match the include filter or because it matched the exclude filter.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Unzip.ErrorCouldNotCreateDestinationDirectory">
         <source>MSB3931: Failed to unzip to directory "{0}" because it could not be created.  {1}</source>
         <target state="translated">MSB3931: ディレクトリ "{0}" への解凍は、そのディレクトリを作成できなかったため、失敗しました。{1}</target>
@@ -2502,6 +2514,16 @@
         <source>MSB3932: Failed to unzip file "{0}" because the file does not exist or is inaccessible.</source>
         <target state="translated">MSB3932: ファイルが存在しないか、アクセスできないため、ファイル "{0}" を解凍できませんでした。</target>
         <note>{StrBegin="MSB3932: "}</note>
+      </trans-unit>
+      <trans-unit id="Unzip.ErrorParsingPatternInvalidPath">
+        <source>MSB3937: Failed to parse pattern "{0}" because it contains an invalid path character.</source>
+        <target state="new">MSB3937: Failed to parse pattern "{0}" because it contains an invalid path character.</target>
+        <note>{StrBegin="MSB3937: "}</note>
+      </trans-unit>
+      <trans-unit id="Unzip.ErrorParsingPatternPropertyReferences">
+        <source>MSB3938: Failed to parse pattern "{0}" because it contains a property reference which isn't supported.</source>
+        <target state="new">MSB3938: Failed to parse pattern "{0}" because it contains a property reference which isn't supported.</target>
+        <note>{StrBegin="MSB3938: "}</note>
       </trans-unit>
       <trans-unit id="Unzip.FileComment">
         <source>Unzipping file "{0}" to "{1}".</source>

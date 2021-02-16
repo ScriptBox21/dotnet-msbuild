@@ -1331,6 +1331,11 @@
         <target state="translated">Le Kit de développement Microsoft Windows SDK a été trouvé dans "{0}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="GetReferenceAssemblyPaths.OutOfDateSDK">
+        <source>MSB3971: The reference assemblies for "{0}" were not found. You might be using an older .NET SDK to target .NET 5.0 or higher. Update Visual Studio and/or your .NET SDK.</source>
+        <target state="translated">MSB3971: les assemblys de référence de "{0}" sont introuvables. Vous utilisez peut-être une ancienne version du kit SDK .NET pour cibler .NET 5.0 ou une version ultérieure. Mettez à jour Visual Studio et/ou votre kit SDK .NET.</target>
+        <note>{StrBegin="MSB3971: "}</note>
+      </trans-unit>
       <trans-unit id="MakeDir.Comment">
         <source>Creating directory "{0}".</source>
         <target state="translated">Création du répertoire "{0}".</target>
@@ -1827,8 +1832,10 @@
         <note>{StrBegin="MSB3276: "}</note>
       </trans-unit>
       <trans-unit id="ResolveAssemblyReference.FoundConflicts">
-        <source>MSB3277: Found conflicts between different versions of "{0}" that could not be resolved.  These reference conflicts are listed in the build log when log verbosity is set to detailed.</source>
-        <target state="translated">MSB3277: Des conflits entre différentes versions de "{0}" ont été trouvés et n'ont pas pu être résolus.  Ces conflits de référence sont consignés dans le journal de génération quand la verbosité du journal est définie sur Detailed.</target>
+        <source>MSB3277: Found conflicts between different versions of "{0}" that could not be resolved.
+{1}</source>
+        <target state="translated">MSB3277: détection de conflits non résolus entre différentes versions de "{0}".
+{1}</target>
         <note>{StrBegin="MSB3277: "}</note>
       </trans-unit>
       <trans-unit id="ResolveAssemblyReference.LogAttributeFormat">
@@ -2473,6 +2480,11 @@
         <target state="translated">Impossible de décompresser le fichier "{0}" vers le fichier "{1}", car le paramètre "{2}" a la valeur "{3}" dans le projet, et les tailles et horodatages des fichiers correspondent.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Unzip.DidNotUnzipBecauseOfFilter">
+        <source>Did not unzip file "{0}" because it didn't match the include filter or because it matched the exclude filter.</source>
+        <target state="new">Did not unzip file "{0}" because it didn't match the include filter or because it matched the exclude filter.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Unzip.ErrorCouldNotCreateDestinationDirectory">
         <source>MSB3931: Failed to unzip to directory "{0}" because it could not be created.  {1}</source>
         <target state="translated">MSB3931: Échec de la décompression dans le répertoire "{0}", car il n'a pas pu être créé. {1}</target>
@@ -2502,6 +2514,16 @@
         <source>MSB3932: Failed to unzip file "{0}" because the file does not exist or is inaccessible.</source>
         <target state="translated">MSB3932: Échec de la décompression du fichier "{0}", car le fichier n'existe pas ou est inaccessible.</target>
         <note>{StrBegin="MSB3932: "}</note>
+      </trans-unit>
+      <trans-unit id="Unzip.ErrorParsingPatternInvalidPath">
+        <source>MSB3937: Failed to parse pattern "{0}" because it contains an invalid path character.</source>
+        <target state="new">MSB3937: Failed to parse pattern "{0}" because it contains an invalid path character.</target>
+        <note>{StrBegin="MSB3937: "}</note>
+      </trans-unit>
+      <trans-unit id="Unzip.ErrorParsingPatternPropertyReferences">
+        <source>MSB3938: Failed to parse pattern "{0}" because it contains a property reference which isn't supported.</source>
+        <target state="new">MSB3938: Failed to parse pattern "{0}" because it contains a property reference which isn't supported.</target>
+        <note>{StrBegin="MSB3938: "}</note>
       </trans-unit>
       <trans-unit id="Unzip.FileComment">
         <source>Unzipping file "{0}" to "{1}".</source>

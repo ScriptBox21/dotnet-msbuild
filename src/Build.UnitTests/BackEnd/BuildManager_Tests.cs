@@ -58,6 +58,11 @@ namespace Microsoft.Build.UnitTests.BackEnd
         private readonly ITestOutputHelper _output;
 
         /// <summary>
+        /// The transient state corresponding to setting MSBUILDINPROCENVCHECK to 1.
+        /// </summary>
+        private readonly TransientTestState _inProcEnvCheckTransientEnvironmentVariable;
+
+        /// <summary>
         /// SetUp
         /// </summary>
         public BuildManager_Tests(ITestOutputHelper output)
@@ -77,7 +82,7 @@ namespace Microsoft.Build.UnitTests.BackEnd
             _projectCollection = new ProjectCollection();
 
             _env = TestEnvironment.Create(output);
-            _env.SetEnvironmentVariable("MSBUILDINPROCENVCHECK", "1");
+            _inProcEnvCheckTransientEnvironmentVariable = _env.SetEnvironmentVariable("MSBUILDINPROCENVCHECK", "1");
         }
 
         /// <summary>
@@ -205,6 +210,14 @@ namespace Microsoft.Build.UnitTests.BackEnd
             _logger.AllBuildEvents.OfType<ProjectEvaluationFinishedEventArgs>()
                 .Count()
                 .ShouldBe(3);
+        }
+
+        [Fact]
+        public void GraphBuildOptionsDefaults()
+        {
+            var options = new GraphBuildOptions();
+
+            options.Build.ShouldBeTrue();
         }
 
         /// <summary>
@@ -3981,7 +3994,7 @@ namespace Microsoft.Build.UnitTests.BackEnd
                 var buildParameters = new BuildParameters()
                 {
                     DisableInProcNode = true,
-                    MaxNodeCount = Environment.ProcessorCount,
+                    MaxNodeCount = NativeMethodsShared.GetLogicalCoreCount(),
                     EnableNodeReuse = false,
                     Loggers = new List<ILogger>()
                     {
@@ -4090,6 +4103,35 @@ $@"<Project InitialTargets=`Sleep`>
                     manager.EndBuild();
                     manager.Dispose();
                 }
+            }
+        }
+
+        [Fact]
+        public void BuildWithZeroConnectionTimeout()
+        {
+            string contents = CleanupFileContents(@"
+<Project>
+ <Target Name='test'>
+    <Message Text='Text'/>
+ </Target>
+</Project>
+");
+            // Do not use MSBUILDINPROCENVCHECK because this test case is expected to leave a defunct in-proc node behind.
+            _inProcEnvCheckTransientEnvironmentVariable.Revert();
+            _env.SetEnvironmentVariable("MSBUILDNODECONNECTIONTIMEOUT", "0");
+
+            BuildRequestData data = GetBuildRequestData(contents);
+            try
+            {
+                BuildResult result = _buildManager.Build(_parameters, data);
+
+                // The build should either finish successfully (very unlikely).
+                result.OverallResult.ShouldBe(BuildResultCode.Success);
+            }
+            catch (Exception e)
+            {
+                // Or it should throw InternalErrorException because the node didn't get connected within 0ms.
+                e.ShouldBeOfType<InternalErrorException>();
             }
         }
 
@@ -4244,6 +4286,36 @@ $@"<Project InitialTargets=`Sleep`>
             GraphBuildResult result = _buildManager.Build(_parameters, data);
             result.OverallResult.ShouldBe(BuildResultCode.Failure);
             result.CircularDependency.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void GraphBuildShouldBeAbleToConstructGraphButSkipBuild()
+        {
+            var graph = Helpers.CreateProjectGraph(env: _env, dependencyEdges: new Dictionary<int, int[]> {{1, new[] {2, 3}}});
+
+            MockLogger logger = null;
+
+            using (var buildSession = new Helpers.BuildManagerSession(_env))
+            {
+                var graphResult = buildSession.BuildGraphSubmission(
+                    new GraphBuildRequestData(
+                        projectGraphEntryPoints: new[] {new ProjectGraphEntryPoint(graph.GraphRoots.First().ProjectInstance.FullPath)},
+                        targetsToBuild: new string[0],
+                        hostServices: null,
+                        flags: BuildRequestDataFlags.None,
+                        graphBuildOptions: new GraphBuildOptions {Build = false}));
+
+                graphResult.OverallResult.ShouldBe(BuildResultCode.Success);
+                logger = buildSession.Logger;
+            }
+
+            logger.EvaluationStartedEvents.Count.ShouldBe(3);
+            logger.ProjectStartedEvents.ShouldBeEmpty();
+            logger.TargetStartedEvents.ShouldBeEmpty();
+            logger.BuildStartedEvents.ShouldHaveSingleItem();
+            logger.BuildFinishedEvents.ShouldHaveSingleItem();
+            logger.FullLog.ShouldContain("Static graph loaded in");
+            logger.FullLog.ShouldContain("3 nodes, 2 edges");
         }
     }
 }

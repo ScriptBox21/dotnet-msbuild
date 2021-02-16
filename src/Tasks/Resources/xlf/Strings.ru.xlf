@@ -1331,6 +1331,11 @@
         <target state="translated">Обнаружен пакет средств разработки Microsoft Windows SDK, установленный в "{0}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="GetReferenceAssemblyPaths.OutOfDateSDK">
+        <source>MSB3971: The reference assemblies for "{0}" were not found. You might be using an older .NET SDK to target .NET 5.0 or higher. Update Visual Studio and/or your .NET SDK.</source>
+        <target state="translated">MSB3971: не найдены базовые сборки для "{0}". Возможно, вы используете более раннюю версию пакета SDK для .NET, предназначенную для .NET 5.0 или более поздней версии. Обновите Visual Studio и (или) пакет SDK для .NET.</target>
+        <note>{StrBegin="MSB3971: "}</note>
+      </trans-unit>
       <trans-unit id="MakeDir.Comment">
         <source>Creating directory "{0}".</source>
         <target state="translated">Создание каталога "{0}".</target>
@@ -1827,8 +1832,10 @@
         <note>{StrBegin="MSB3276: "}</note>
       </trans-unit>
       <trans-unit id="ResolveAssemblyReference.FoundConflicts">
-        <source>MSB3277: Found conflicts between different versions of "{0}" that could not be resolved.  These reference conflicts are listed in the build log when log verbosity is set to detailed.</source>
-        <target state="translated">MSB3277: обнаружены неразрешимые конфликты между различными версиями "{0}". Эти конфликты перечисляются в журнале сборки, если выбран подробный уровень детализации журнала.</target>
+        <source>MSB3277: Found conflicts between different versions of "{0}" that could not be resolved.
+{1}</source>
+        <target state="translated">MSB3277: обнаружены конфликты между разными версиями "{0}", разрешить которые не удалось.
+{1}</target>
         <note>{StrBegin="MSB3277: "}</note>
       </trans-unit>
       <trans-unit id="ResolveAssemblyReference.LogAttributeFormat">
@@ -2473,6 +2480,11 @@
         <target state="translated">Не удалось выполнить распаковку из файла "{0}" в файл "{1}", так как для параметра "{2}" в проекте было задано значение "{3}", а размеры файлов и отметки времени совпадают.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Unzip.DidNotUnzipBecauseOfFilter">
+        <source>Did not unzip file "{0}" because it didn't match the include filter or because it matched the exclude filter.</source>
+        <target state="new">Did not unzip file "{0}" because it didn't match the include filter or because it matched the exclude filter.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Unzip.ErrorCouldNotCreateDestinationDirectory">
         <source>MSB3931: Failed to unzip to directory "{0}" because it could not be created.  {1}</source>
         <target state="translated">MSB3931: не удалось выполнить распаковку в каталог "{0}", так как создать его не удалось. {1}</target>
@@ -2502,6 +2514,16 @@
         <source>MSB3932: Failed to unzip file "{0}" because the file does not exist or is inaccessible.</source>
         <target state="translated">MSB3932: не удалось распаковать файл "{0}", так как он не существует или недоступен.</target>
         <note>{StrBegin="MSB3932: "}</note>
+      </trans-unit>
+      <trans-unit id="Unzip.ErrorParsingPatternInvalidPath">
+        <source>MSB3937: Failed to parse pattern "{0}" because it contains an invalid path character.</source>
+        <target state="new">MSB3937: Failed to parse pattern "{0}" because it contains an invalid path character.</target>
+        <note>{StrBegin="MSB3937: "}</note>
+      </trans-unit>
+      <trans-unit id="Unzip.ErrorParsingPatternPropertyReferences">
+        <source>MSB3938: Failed to parse pattern "{0}" because it contains a property reference which isn't supported.</source>
+        <target state="new">MSB3938: Failed to parse pattern "{0}" because it contains a property reference which isn't supported.</target>
+        <note>{StrBegin="MSB3938: "}</note>
       </trans-unit>
       <trans-unit id="Unzip.FileComment">
         <source>Unzipping file "{0}" to "{1}".</source>
