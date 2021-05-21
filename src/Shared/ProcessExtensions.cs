@@ -5,13 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Microsoft.Build.Shared;
 
-namespace Microsoft.Build.Utilities
+namespace Microsoft.Build.Shared
 {
     internal static class ProcessExtensions
     {
-        public static void KillTree(this Process process, int timeout)
+        public static void KillTree(this Process process, int timeoutMilliseconds)
         {
             if (NativeMethodsShared.IsWindows)
             {
@@ -41,17 +40,17 @@ namespace Microsoft.Build.Utilities
             // wait until the process finishes exiting/getting killed. 
             // We don't want to wait forever here because the task is already supposed to be dieing, we just want to give it long enough
             // to try and flush what it can and stop. If it cannot do that in a reasonable time frame then we will just ignore it.
-            process.WaitForExit(timeout);
+            process.WaitForExit(timeoutMilliseconds);
         }
 
         private static void GetAllChildIdsUnix(int parentId, ISet<int> children)
         {
-            var exitCode = RunProcessAndWaitForExit(
+            RunProcessAndWaitForExit(
                 "pgrep",
                 $"-P {parentId}",
                 out string stdout);
 
-            if (exitCode == 0 && !string.IsNullOrEmpty(stdout))
+            if (!string.IsNullOrEmpty(stdout))
             {
                 using (var reader = new StringReader(stdout))
                 {
@@ -77,13 +76,24 @@ namespace Microsoft.Build.Utilities
 
         private static void KillProcessUnix(int processId)
         {
-            RunProcessAndWaitForExit(
-                "kill",
-                $"-TERM {processId}",
-                out string _);
+            try
+            {
+                using Process process = Process.GetProcessById(processId);
+                process.Kill();
+            }
+            catch (ArgumentException)
+            {
+                // Process already terminated.
+                return;
+            }
+            catch (InvalidOperationException)
+            {
+                // Process already terminated.
+                return;
+            }
         }
 
-        private static int RunProcessAndWaitForExit(string fileName, string arguments, out string stdout)
+        private static void RunProcessAndWaitForExit(string fileName, string arguments, out string stdout)
         {
             var startInfo = new ProcessStartInfo
             {
@@ -94,22 +104,8 @@ namespace Microsoft.Build.Utilities
             };
 
             var process = Process.Start(startInfo);
-
-            stdout = null;
-            if (process.WaitForExit((int) TimeSpan.FromSeconds(30).TotalMilliseconds))
-            {
-                stdout = process.StandardOutput.ReadToEnd();
-            }
-            else
-            {
-                process.Kill();
-                
-                // Kill is asynchronous so we should still wait a little
-                //
-                process.WaitForExit((int) TimeSpan.FromSeconds(1).TotalMilliseconds);
-            }
-
-            return process.HasExited ? process.ExitCode : -1;
+            stdout = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
         }
     }
 }

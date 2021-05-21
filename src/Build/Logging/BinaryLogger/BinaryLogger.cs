@@ -41,7 +41,14 @@ namespace Microsoft.Build.Logging
         //      * NameValueList - deduplicate arrays of name-value pairs such as properties, items and metadata
         //                        in a separate record and refer to those records from regular records
         //                        where a list used to be written in-place
-        internal const int FileFormatVersion = 10;
+        // version 11:
+        //   - new record kind: TaskParameterEventArgs
+        // version 12:
+        //   - add GlobalProperties, Properties and Items on ProjectEvaluationFinished
+        // version 13:
+        //   - don't log Message where it can be recovered
+        //   - log arguments for LazyFormattedBuildEventArgs
+        internal const int FileFormatVersion = 13;
 
         private Stream stream;
         private BinaryWriter binaryWriter;
@@ -101,6 +108,7 @@ namespace Microsoft.Build.Logging
             Environment.SetEnvironmentVariable("MSBUILDTARGETOUTPUTLOGGING", "true");
             Environment.SetEnvironmentVariable("MSBUILDLOGIMPORTS", "1");
             Traits.Instance.EscapeHatches.LogProjectImports = true;
+            bool logPropertiesAndItemsAfterEvaluation = Traits.Instance.EscapeHatches.LogPropertiesAndItemsAfterEvaluation ?? true;
 
             ProcessParameters();
 
@@ -133,6 +141,11 @@ namespace Microsoft.Build.Logging
                 {
                     eventSource3.IncludeEvaluationMetaprojects();
                 }
+
+                if (logPropertiesAndItemsAfterEvaluation && eventSource is IEventSource4 eventSource4)
+                {
+                    eventSource4.IncludeEvaluationPropertiesAndItems();
+                }
             }
             catch (Exception e)
             {
@@ -151,11 +164,24 @@ namespace Microsoft.Build.Logging
             binaryWriter = new BinaryWriter(stream);
             eventArgsWriter = new BuildEventArgsWriter(binaryWriter);
 
+            if (projectImportsCollector != null)
+            {
+                eventArgsWriter.EmbedFile += EventArgsWriter_EmbedFile;
+            }
+
             binaryWriter.Write(FileFormatVersion);
 
             LogInitialInfo();
 
             eventSource.AnyEventRaised += EventSource_AnyEventRaised;
+        }
+
+        private void EventArgsWriter_EmbedFile(string filePath)
+        {
+            if (projectImportsCollector != null)
+            {
+                projectImportsCollector.AddFile(filePath);
+            }
         }
 
         private void LogInitialInfo()

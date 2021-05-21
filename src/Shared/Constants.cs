@@ -53,7 +53,7 @@ namespace Microsoft.Build.Shared
         /// <summary>
         /// The most current Visual Studio Version known to this version of MSBuild.
         /// </summary>
-        internal const string CurrentVisualStudioVersion = "16.0";
+        internal const string CurrentVisualStudioVersion = "17.0";
 
         /// <summary>
         /// The most current ToolsVersion known to this version of MSBuild.
@@ -70,7 +70,7 @@ namespace Microsoft.Build.Shared
         /// <summary>
         /// Current version of this MSBuild Engine assembly in the form, e.g, "12.0"
         /// </summary>
-        internal const string CurrentProductVersion = "16.0";
+        internal const string CurrentProductVersion = "17.0";
         
         /// <summary>
         /// Symbol used in ProjectReferenceTarget items to represent default targets
@@ -141,6 +141,11 @@ namespace Microsoft.Build.Shared
         /// Declares a project cache plugin and its configuration.
         /// </summary>
         internal const string ProjectCachePlugin = nameof(ProjectCachePlugin);
+
+        /// <summary>
+        /// Embed specified files in the binary log
+        /// </summary>
+        internal const string EmbedInBinlog = nameof(EmbedInBinlog);
     }
 
     /// <summary>
@@ -166,6 +171,10 @@ namespace Microsoft.Build.Shared
         internal const string subType = "SubType";
         internal const string executableExtension = "ExecutableExtension";
         internal const string embedInteropTypes = "EmbedInteropTypes";
+
+        /// <summary>
+        /// The output path for a given item.
+        /// </summary>
         internal const string targetPath = "TargetPath";
         internal const string dependentUpon = "DependentUpon";
         internal const string msbuildSourceProjectFile = "MSBuildSourceProjectFile";

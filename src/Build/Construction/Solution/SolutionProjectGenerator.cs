@@ -781,7 +781,8 @@ namespace Microsoft.Build.Construction
                 AddTraversalTargetForProject(traversalInstance, project, projectConfiguration, "Rebuild", "BuildOutput", canBuildDirectly);
                 AddTraversalTargetForProject(traversalInstance, project, projectConfiguration, "Publish", null, canBuildDirectly);
 
-                // Add any other targets specified by the user that were not already added
+                // Add any other targets specified by the user that were not already added. A target's presence or absence must be determined at the last
+                // minute because whether traversalInstance.Targets.ContainsKey(i) is true or not can change during the enumeration.
                 foreach (string targetName in _targetNames.Where(i => !traversalInstance.Targets.ContainsKey(i)))
                 {
                     AddTraversalTargetForProject(traversalInstance, project, projectConfiguration, targetName, null, canBuildDirectly);
